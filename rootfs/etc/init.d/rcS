@@ -1,0 +1,10 @@
+#! /bin/sh
+
+/bin/mount -a
+
+mount -o remount,rw /dev/root /
+
+#reference the openwrt /lib/preinit/10_essential_fs
+pi_size=$(awk '/MemTotal:/ {l=5242880;mt=($2*1024);print((s=mt/2)<l)&&(mt>l)?mt-l:s}' /proc/meminfo)
+mount tmpfs /tmp -t tmpfs -o size=$pi_size,nosuid,nodev,mode=1777
+
