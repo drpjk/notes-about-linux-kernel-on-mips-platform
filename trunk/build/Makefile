@@ -17,7 +17,7 @@ export CROSSSTRIP=$(TOOLPREFIX)strip
 export CROSSREADELF=$(TOOLPREFIX)readelf
 
 
-all: rootfs_pre toolchain_check busybox kernel rootfs
+all: rootfs_pre toolchain_check busybox shellinabox kernel rootfs
 
 rootfs_pre:
 	rm -rf $(PRJ_FS_PATH)
@@ -58,3 +58,10 @@ clean_all:
 #also,don't forget the ld.
 share_lib_check:
 	$(CROSSREADELF) -a $(PRJ_FS_PATH)/bin/busybox | grep "Shared library"
+	$(CROSSREADELF) -a $(PRJ_FS_PATH)/bin/shellinaboxd | grep "Shared library"
+	
+shellinabox:
+	cd $(PRJ_APPS_PATH)/shellinabox-2.14 && ./configure --build=i686-linux --host=mips-linux CC="mips-openwrt-linux-uclibc-gcc" --prefix=$(PRJ_FS_PATH)
+	cd $(PRJ_APPS_PATH)/shellinabox-2.14 && make && make install
+	
+	
