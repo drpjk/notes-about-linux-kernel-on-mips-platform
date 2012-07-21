@@ -595,6 +595,7 @@ struct Utmp *newUtmp(int useLogin, const char *ptyPath,
   return utmp;
 }
 
+#ifdef HAVE_UTMPX_H
 #if defined(HAVE_UPDWTMP) && !defined(HAVE_UPDWTMPX)
 #define min(a,b) ({ typeof(a) _a=(a); typeof(b) _b=(b); _a < _b ? _a : _b; })
 #define updwtmpx x_updwtmpx
@@ -615,6 +616,7 @@ static void updwtmpx(const char *wtmpx_file, const struct utmpx *utx) {
          min(sizeof(ut.ut_host), sizeof(utx->ut_host)));
   updwtmp(wtmpx_file, &ut);
 }
+#endif
 #endif
 
 void destroyUtmp(struct Utmp *utmp) {
